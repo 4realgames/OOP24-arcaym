@@ -1,0 +1,77 @@
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
+
+classDiagram
+    class App {
+        <<interface>>
+        +setView(view: View)
+        +exportToGame()
+        +returnToEditor()
+    }
+
+    App *.. GameController
+    App *.. EditorController
+
+    class EditorController {
+        <<interface>>
+        +place(type: GameObjectType, position: Position)
+        +remove(position: Position)
+    }
+
+    class GameController {
+        <<interface>>
+        +startGame()
+        +stopGame()
+    }
+
+    class GameObjectType {
+        <<enumeration>>
+        PLAYER
+        WALL
+        FLOOR
+        OBSTACLE
+        ...
+    }
+
+    class GameObject {
+        <<interface>>
+        +getType() GameObjectType
+        +getPosition() Postion
+        +update(world: GameWorld)
+    }
+    GameObject --* GameObjectType
+
+    class GameEngine {
+        <<interface>>
+        +loop()
+        +stop()
+    }
+    
+    class GameState {
+        <<interface>>
+        +updateObjects()
+    }
+    class GameWorld {
+        <<interface>>
+        +getObjects() ...GameObject
+        +win()
+        +gameOver()
+    }
+
+    GameState *-- GameWorld
+    GameObject ..> GameWorld
+    GameObject "0..n" --o GameWorld
+
+    GameEngine *-- GameState
+    GameController *-- GameEngine
+
+    class EditorGrid {
+        <<interface>>
+    }
+
+    EditorController ..> GameObjectType
+    EditorController *.. EditorGrid
+    EditorGrid o.. "0..n" GameObjectType
