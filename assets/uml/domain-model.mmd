@@ -17,8 +17,8 @@ classDiagram
 
     class EditorController {
         <<interface>>
-        +place(type: GameObjectType, position: Position)
-        +remove(position: Position)
+        +place()
+        +remove()
     }
 
     class GameController {
@@ -27,51 +27,43 @@ classDiagram
         +stopGame()
     }
 
+    GameController *-- GameEngine
+
+    class GameEngine {
+        <<interface>>
+    }
+
     class GameObjectType {
         <<enumeration>>
-        PLAYER
-        WALL
-        FLOOR
-        OBSTACLE
-        ...
+        BLOCK
+        ACTOR
+        COLLECTABLE
     }
 
     class GameObject {
         <<interface>>
         +getType() GameObjectType
-        +getPosition() Postion
-        +update(world: GameWorld)
     }
     GameObject --* GameObjectType
 
-    class GameEngine {
-        <<interface>>
-        +loop()
-        +stop()
-    }
-    
-    class GameState {
-        <<interface>>
-        +updateObjects()
-    }
-    class GameWorld {
-        <<interface>>
-        +getObjects() ...GameObject
-        +win()
-        +gameOver()
-    }
-
-    GameState *-- GameWorld
-    GameObject ..> GameWorld
-    GameObject "0..n" --o GameWorld
-
-    GameEngine *-- GameState
-    GameController *-- GameEngine
 
     class EditorGrid {
         <<interface>>
     }
+    class EditorMenu {
+        <<interface>>
+    }
 
-    EditorController ..> GameObjectType
+    EditorController *.. EditorMenu
     EditorController *.. EditorGrid
-    EditorGrid o.. "0..n" GameObjectType
+
+    EditorMenu o-- GameObject
+    EditorGrid o-- GameObject
+    GameEngine o-- GameObject
+
+    Player --|> GameObject
+    Wall --|> GameObject
+    Floor --|> GameObject
+    End --|> GameObject
+    Spike --|> GameObject
+    Coin --|> GameObject
