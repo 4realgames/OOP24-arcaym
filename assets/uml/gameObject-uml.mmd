@@ -1,0 +1,29 @@
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
+
+classDiagram
+    
+    class GameObjectType {
+        <<enumeration>>
+        BLOCK
+        ACTOR
+        COLLECTABLE
+    }
+
+    class GameObject {
+        <<interface>>
+        +getType() GameObjectType
+    }
+    GameObject --* GameObjectType
+
+
+
+    Player --|> GameObject
+    Wall --|> GameObject
+    Floor --|> GameObject
+    End --|> GameObject
+    Spike --|> GameObject
+    Coin --|> GameObject

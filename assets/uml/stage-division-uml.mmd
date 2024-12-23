@@ -1,0 +1,52 @@
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
+
+classDiagram
+    class App {
+        <<interface>>
+        +setView(view: View)
+        +exportToGame()
+        +returnToEditor()
+    }
+
+    App *.. Game
+    App *.. Editor
+
+    class Editor {
+        <<interface>>
+        +place()
+        +remove()
+    }
+
+    class Game {
+        <<interface>>
+        +startGame()
+        +stopGame()
+    }
+
+    Game *-- GameEngine
+
+    class GameEngine {
+        <<interface>>
+    }
+
+    
+
+    class EditorGrid {
+        <<interface>>
+    }
+    class EditorMenu {
+        <<interface>>
+    }
+
+    Editor *.. EditorMenu
+    Editor *.. EditorGrid
+
+    %%EditorMenu o-- GameObject
+    %%EditorGrid o-- GameObject
+    %%GameEngine o-- GameObject
+
+
