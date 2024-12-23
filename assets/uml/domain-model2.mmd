@@ -1,0 +1,39 @@
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
+
+classDiagram
+    class App {
+        +setView(view: View)
+        +exportToGame()
+        +returnToEditor()
+    }
+
+    App *.. Game
+    App *.. Editor
+
+    class Editor {
+        +place()
+        +remove()
+    }
+
+    class Game {
+        +startGame()
+        +stopGame()
+    }
+
+    Editor *.. EditorMenu
+    Editor *.. EditorGrid
+
+    EditorMenu --> GameObject
+    EditorGrid --> GameObject
+    Game --> GameObject
+
+    Player --|> GameObject
+    Wall --|> GameObject
+    Floor --|> GameObject
+    End --|> GameObject
+    Spike --|> GameObject
+    Coin --|> GameObject
