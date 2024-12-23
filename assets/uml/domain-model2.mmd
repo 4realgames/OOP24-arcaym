@@ -27,6 +27,17 @@ classDiagram
     Editor *.. EditorMenu
     Editor *.. EditorGrid
 
+    class GameObjectType {
+        <<enumeration>>
+        BLOCK
+        ACTOR
+        COLLECTABLE
+    }
+    class GameObject {
+        +getType() GameObjectType
+    }
+    GameObject --> GameObjectType
+
     EditorMenu --> GameObject
     EditorGrid --> GameObject
     Game --> GameObject
