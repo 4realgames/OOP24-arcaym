@@ -1,0 +1,82 @@
+---
+config:
+  class:
+    hideEmptyMembersBox: true
+---
+
+classDiagram
+    class GameEngine {
+        <<interface>>
+        +startGame()
+        +stopGame()
+    }
+
+    class GameWorld {
+        <<interface>>
+        +addObject(obj: GameObject)
+        +destroyObject(obj: GameObject)
+        +getObjects() Stream[GameObject]
+        +getOtherObjects(obj: GameObject) Stream[GameObject]
+        +eventsManager() GameEventsManager
+        +inputsManager() GameInputsManager
+    }
+    GameWorld --> GameObject
+    GameEngine *-- GameWorld
+
+    class GameEvent {
+        <<enumeration>>
+        VICTORY
+        GAME_OVER
+    }
+    class GameEventsManager {
+        <<interface>>
+        +registerObserver(event: GameEvent, callback: Consumer[GameEvent])
+        +unregisterObserver(event: GameEvent, callback: Consumer[GameEvent])
+        +notifyObservers(event: GameEvent)
+        +scheduleEvent(event: GameEvent)
+        +getPendingEvents() Stream[GameEvent]
+    }
+    GameEventsManager --> GameEvent
+    GameWorld *-- GameEventsManager
+
+    class GameInput {
+        <<enumeration>>
+        LEFT
+        RIGHT
+        UP
+        DOWN
+    }
+    class GameInputsManager {
+        <<interface>>
+        +registerObserver(input: GameInput, callback: Consumer[GameInput])
+        +unregisterObserver(input: GameInput, callback: Consumer[GameInput])
+        +notifyObservers(input: GameInput)
+        +scheduleInput(input: GameInput)
+        +getPendingInputs() Stream[InputEvent]
+    }
+    GameInputsManager --> GameInput
+    GameWorld *-- GameInputsManager
+
+    class GameScore {
+        +getValue() int
+        +increment(amount: int)
+        +decrement(amount: int)
+    }
+    GameWorld *-- GameScore
+
+    class GameObject {
+        <<interface>>
+        +getWorld() GameWorld
+        +addComponent(component: GameObjectComponent)
+        +removeComponent(component: GameObjectComponent)
+        +getComponents() Stream[GameObjectComponent]
+    }
+
+    class GameObjectComponent {
+        <<interface>>
+        +registerEventObservers(eventsManager: GameEventsManager)
+        +registerInputObservers(inputsManager: GameInputsManager)
+        +update(deltaTime: long)
+    }
+    GameObject --> GameWorld
+    GameObject o--* GameObjectComponent
